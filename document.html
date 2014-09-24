@@ -1,0 +1,24 @@
+<head><title>TITLE GOES HERE</title>
+<script>
+function transform() {
+  var content = document.body.innerHTML;
+  var lines = content.split(/\r?\n/);
+  newLines = lines.map(function(currentValue, index, array){
+    if (currentValue.match(/^#*/)) {
+      var headingLevel = currentValue.match(/^#*/)[0].length;
+      return "<p><h" + headingLevel + ">"+currentValue.replace(/^#*/,'')+"</h" + headingLevel + "></p>";
+    } else {
+      return "<p>"+currentValue+"</p>";
+    }
+  });
+  document.body.innerHTML = newLines.join('');
+}
+</script>
+</head>
+<body onload="transform()">
+# This is an H1
+
+## This is an H2
+
+### This is an H3
+</body>
