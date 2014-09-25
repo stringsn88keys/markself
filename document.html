@@ -1,14 +1,39 @@
 <head><title>TITLE GOES HERE</title>
 <script>
+// TODO: do this as a stack instead, so that closing lists can drop more than one level
+var bulletLevel = 0
+
+function bulletThis(value) {
+  var thisBulletLevel = value.match(/^[ ]*\*+ /)[0].length;
+  var strippedString = value.replace(/^[ ]*\*+ /,'');
+  if(bulletLevel < thisBulletLevel) {
+    bulletLevel = thisBulletLevel;
+    return "<ul><li>"+strippedString+"</li>";
+  } else if (bulletLevel > thisBulletLevel) {
+    bulletLevel = thisBulletLevel;
+    return "</ul><li>"+strippedString+"</li>";
+  } else {
+    return "<li>"+strippedString+"</li>";
+  }
+}
+function pLine(value) {
+  if(bulletLevel > 0) {
+    return "</ul>" + "<p>" + value + "</p>";
+  } else {
+    return "<p>" + value + "</p>";
+  }
+}
 function transform() {
   var content = document.body.innerHTML;
   var lines = content.split(/\r?\n/);
   newLines = lines.map(function(currentValue, index, array){
-    if (currentValue.match(/^#*/)) {
+    if (currentValue.match(/^#+/)) {
       var headingLevel = currentValue.match(/^#*/)[0].length;
       return "<p><h" + headingLevel + ">"+currentValue.replace(/^#*/,'')+"</h" + headingLevel + "></p>";
+    } else if ( currentValue.match(/^[ ]*\*+ /) ) {
+      return bulletThis(currentValue);
     } else {
-      return "<p>"+currentValue+"</p>";
+      return pLine(currentValue);
     }
   });
   document.body.innerHTML = newLines.join('');
@@ -21,4 +46,12 @@ function transform() {
 ## This is an H2
 
 ### This is an H3
+
+* one
+** two
+** three
+* four
+
+nothing
+
 </body>
