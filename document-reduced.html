@@ -1,0 +1,21 @@
+<head><title>TITLE GOES HERE</title>
+<script>
+var bulletLevel=0;function bulletThis(a){var b=a.match(/^[ ]*\*+ /)[0].length;a=a.replace(/^[ ]*\*+ /,"");return bulletLevel<b?(bulletLevel=b,"<ul><li>"+a+"</li>"):bulletLevel>b?(bulletLevel=b,"</ul><li>"+a+"</li>"):"<li>"+a+"</li>"}function pLine(a){return 0<bulletLevel?"</ul><p>"+a+"</p>":"<p>"+a+"</p>"}
+function transform(){newLines=document.body.innerHTML.split(/\r?\n/).map(function(a,b,c){return a.match(/^#+/)?(b=a.match(/^#*/)[0].length,"<p><h"+b+">"+a.replace(/^#*/,"")+"</h"+b+"></p>"):a.match(/^[ ]*\*+ /)?bulletThis(a):pLine(a)});document.body.innerHTML=newLines.join("")};
+</script>
+</head>
+<body onload="transform()">
+# This is an H1
+
+## This is an H2
+
+### This is an H3
+
+* one
+** two
+** three
+* four
+
+nothing
+
+</body>
